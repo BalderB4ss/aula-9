@@ -34,6 +34,7 @@ def cadastrar_filme():
     ano_lancamento = int(input("Digite o ano de lançamento do filme: "))
     nota = float(input("Digite a nota do filme: "))
 
+
     with Session() as session:
         try:
             # Verificar o título duplicado
@@ -49,5 +50,10 @@ def cadastrar_filme():
             session.rollback()
             print(f"Ocorreu um erro {error}")
 
-cadastrar_filme()
+def listar_filme():
+    lista = Session().query(Filme).all()
+    for i in lista:
+        print(f"Título: {i.titulo} | Gênero: {i.genero} | Ano de lançamento: {i.ano_lancamento} | Nota: {i.nota} | Disponível? {i.disponivel}")
+
+listar_filme()
 
