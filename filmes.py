@@ -51,9 +51,27 @@ def cadastrar_filme():
             print(f"Ocorreu um erro {error}")
 
 def listar_filme():
-    lista = Session().query(Filme).all()
-    for i in lista:
-        print(f"Título: {i.titulo} | Gênero: {i.genero} | Ano de lançamento: {i.ano_lancamento} | Nota: {i.nota} | Disponível? {i.disponivel}")
 
-listar_filme()
+    with Session() as session:
+        try:
+            lista = Session().query(Filme).all()
+            for i in lista:
+                print(f"Título: {i.titulo} | Gênero: {i.genero} | Ano de lançamento: {i.ano_lancamento} | Nota: {i.nota} | Disponível? {i.disponivel}")
+        except Exception as error:
+            session.rollback()
+            print(f"Ocorreu um erro: {error}")
+            
+def deletar_filme():
+    id = int(input("Digite o id do filme que deseja deletar: "))
+    
+    with Session() as session:
+        try:
+            apagar_filme = session.query(Filme).filter_by(id=id).first()
+            session.delete(apagar_filme)
+            session.commit()
 
+        except Exception as error:
+            session.rollback()
+            print(f"Ocorreu um erro: {error}")
+
+deletar_filme()
