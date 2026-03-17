@@ -44,7 +44,8 @@ def cadastrar_filme():
                 session.add(novo_filme)
                 session.commit()
                 print("Filme cadastrado com sucesso!")
-            print("Já existe um filme com esse filme e esse ano!")
+            else:
+                print("Já existe um filme com esse filme e esse ano!")
 
         except Exception as error:
             session.rollback()
@@ -69,9 +70,25 @@ def deletar_filme():
             apagar_filme = session.query(Filme).filter_by(id=id).first()
             session.delete(apagar_filme)
             session.commit()
-
+            print(f"O id: {id} foi deletado com sucesso!")
         except Exception as error:
             session.rollback()
             print(f"Ocorreu um erro: {error}")
 
-deletar_filme()
+def atualizar_filme():
+    id = int(input("Digite o id do filme que deseja atualizar: "))
+    titulo = input("Digite o título do filme: ")
+    genero = input("Digite o genero do filme: ")
+    ano_lancamento = int(input("Digite o ano de lançamento do filme: "))
+    nota = float(input("Digite a nota do filme: "))
+    with Session() as session:
+        try:
+            atualizar_filme = session.query(Filme).filter_by(id=id).first()
+            atualizar_filme.titulo, atualizar_filme.genero, atualizar_filme.ano_lancamento, atualizar_filme.nota = titulo, genero, ano_lancamento, nota
+            session.commit()
+            print(f"O id: {id} foi atualizado com sucesso!")
+        except Exception as error:
+            session.rollback()
+            print(f"Ocorreu um erro: {error}")
+
+atualizar_filme()
