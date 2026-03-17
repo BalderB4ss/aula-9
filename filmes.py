@@ -64,29 +64,36 @@ def listar_filme():
             
 def deletar_filme():
     id = int(input("Digite o id do filme que deseja deletar: "))
-    
+    buscar_filme = session.query(Filme).filter_by(id=id).first()
     with Session() as session:
         try:
-            apagar_filme = session.query(Filme).filter_by(id=id).first()
-            session.delete(apagar_filme)
-            session.commit()
-            print(f"O id: {id} foi deletado com sucesso!")
+            if buscar_filme != None:
+                apagar_filme = session.query(Filme).filter_by(id=id).first()
+                session.delete(apagar_filme)
+                session.commit()
+                print(f"O id: {id} foi deletado com sucesso!")
+            else:
+                print(f"O id: {id} não existe na tabela!")
         except Exception as error:
             session.rollback()
             print(f"Ocorreu um erro: {error}")
 
 def atualizar_filme():
     id = int(input("Digite o id do filme que deseja atualizar: "))
-    titulo = input("Digite o título do filme: ")
-    genero = input("Digite o genero do filme: ")
-    ano_lancamento = int(input("Digite o ano de lançamento do filme: "))
-    nota = float(input("Digite a nota do filme: "))
+    buscar_filme = session.query(Filme).filter_by(id=id).first()
     with Session() as session:
         try:
-            atualizar_filme = session.query(Filme).filter_by(id=id).first()
-            atualizar_filme.titulo, atualizar_filme.genero, atualizar_filme.ano_lancamento, atualizar_filme.nota = titulo, genero, ano_lancamento, nota
-            session.commit()
-            print(f"O id: {id} foi atualizado com sucesso!")
+            if buscar_filme != None:
+                titulo = input("Digite o título do filme: ")
+                genero = input("Digite o genero do filme: ")
+                ano_lancamento = int(input("Digite o ano de lançamento do filme: "))
+                nota = float(input("Digite a nota do filme: "))
+                atualizar_filme = session.query(Filme).filter_by(id=id).first()
+                atualizar_filme.titulo, atualizar_filme.genero, atualizar_filme.ano_lancamento, atualizar_filme.nota = titulo, genero, ano_lancamento, nota
+                session.commit()
+                print(f"O id: {id} foi atualizado com sucesso!")
+            else:
+                print(f"O id: {id} não existe na tabela!")
         except Exception as error:
             session.rollback()
             print(f"Ocorreu um erro: {error}")
